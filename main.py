@@ -1,5 +1,5 @@
 import argparse
-from model.unet import train_Unet, test_Unet
+from UNet_run import train_UNet, test_UNet
 
 
 if __name__ == '__main__':
@@ -10,9 +10,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     print(args.model_name)
-    print(args.test)
+    #print(args.test)
     if args.model_name=='UNet':
         if args.test==False:
-            train_Unet()
+            train_UNet()
         else:
-            test_Unet(args.model_path)
+            test_UNet()
