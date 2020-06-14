@@ -1,5 +1,5 @@
 import argparse
-from Unet import train_Unet, test_Unet
+from model.unet import train_Unet, test_Unet
 
 
 if __name__ == '__main__':
