@@ -9,7 +9,7 @@ def mkdir(*paths):
 
 ROOT_DIR = os.path.dirname(os.path.abspath('__file__'))
 DATA_DIR = os.path.join(ROOT_DIR, 'dataset')
-CKPT_DIR = os.path.join(ROOT_DIR, 'checkpoints')
+CKPT_DIR = os.path.join(ROOT_DIR, 'saved_models')
 # LOG_DIR = os.path.join(ROOT_DIR, 'logs')
 # TRAIN_LOG_DIR = os.path.join(LOG_DIR, 'train')
 # VAL_LOG_DIR = os.path.join(LOG_DIR, 'val')
