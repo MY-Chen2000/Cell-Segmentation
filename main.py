@@ -1,6 +1,6 @@
 import argparse
-from UNet_run import train_UNet, test_UNet
-
+from Unet_run import train_UNet, test_UNet
+from Unetplus_run import train_UNetplus, test_UNetplus
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
@@ -16,3 +16,9 @@ if __name__ == '__main__':
             train_UNet()
         else:
             test_UNet()
+
+    if args.model_name=='UNetplus':
+        if args.test==False:
+            train_UNetplus()
+        else:
+            test_UNetplus()
