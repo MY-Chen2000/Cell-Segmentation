@@ -144,7 +144,7 @@ def test_UNet():
         ToTensor(),
     ])
 
-    RESULTS_DIR = os.path.join(ROOT_DIR, 'test_results')
+    RESULTS_DIR = os.path.join(ROOT_DIR, 'test_results/unet')
     if not os.path.exists(RESULTS_DIR):
         os.makedirs(RESULTS_DIR)
     label_save_path = os.path.join(RESULTS_DIR, 'label')
