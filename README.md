@@ -17,9 +17,7 @@ Unet train and test
 
     python main.py
     python main.py --test
-UNet++ train
+UNet++ train and test
         
     python main.py --model_name UNetplus
-UNet++ test
-
     python main.py --model_name UNetplus --test
