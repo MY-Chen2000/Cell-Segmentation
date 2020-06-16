@@ -13,11 +13,9 @@ Requirements
 
 Usage
 -------------
-Unet train
+Unet train and test
 
     python main.py
-Unet test
-
     python main.py --test
 UNet++ train
         
