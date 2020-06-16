@@ -16,3 +16,12 @@ Usage
 Unet train
 
     python main.py
+Unet test
+
+        python main.py --test
+UNet++ train
+        
+        python main.py --model_name UNetplus
+UNet++ test
+
+        python main.py --model_name UNetplus --test
