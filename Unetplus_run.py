@@ -14,7 +14,9 @@ from utils.UNet_utils import *
 from models.unetplus import NestedUNet
 from config import *
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def train(train_loader, model, criterion, optimizer):
     avg_meters = {'loss': AverageMeter(),
@@ -27,9 +29,19 @@ def train(train_loader, model, criterion, optimizer):
         input = data['img'].to(device)
         target = data['label'].to(device)
 
-        output = model(input)
-        loss = criterion(output, target)
-        iou = iou_score(output, target)
+        # compute output
+        deep_supervision = True
+        if deep_supervision:
+            outputs = model(input)
+            loss = 0
+            for output in outputs:
+                loss += criterion(output, target)
+            loss /= len(outputs)
+            iou = iou_score(outputs[-1], target)
+        else:
+            output = model(input)
+            loss = criterion(output, target)
+            iou = iou_score(output, target)
 
         # compute gradient and do optimizing step
         optimizer.zero_grad()
@@ -62,10 +74,19 @@ def validate(val_loader, model, criterion):
             target = data['label'].to(device)
 
             # compute output
+            deep_supervision=True
+            if deep_supervision:
+                outputs = model(input)
+                loss = 0
+                for output in outputs:
+                    loss += criterion(output, target)
+                loss /= len(outputs)
+                iou = iou_score(outputs[-1], target)
+            else:
+                output = model(input)
+                loss = criterion(output, target)
+                iou = iou_score(output, target)
 
-            output = model(input)
-            loss = criterion(output, target)
-            iou = iou_score(output, target)
 
             avg_meters['loss'].update(loss.item(), input.size(0))
             avg_meters['iou'].update(iou, input.size(0))
@@ -82,8 +103,10 @@ def train_UNetplus():
     cfg = UnetplusConfig()
     criterion = nn.BCEWithLogitsLoss().cuda()
     cudnn.benchmark = True
-    model=NestedUNet(1,1,False)
+    model=NestedUNet(1,1,True)
+    print(count_parameters(model))
     model = model.cuda()
+
     params = filter(lambda p: p.requires_grad, model.parameters())
     #optimizer = optim.SGD(params, lr=cfg.LEARNING_RATE, momentum=cfg.momentum,nesterov=cfg.nesterov, weight_decay=cfg.weight_decay)
     optimizer = optim.Adam(params, lr=cfg.LEARNING_RATE, weight_decay=cfg.weight_decay)
@@ -157,7 +180,8 @@ def test_UNetplus():
     cudnn.benchmark = True
     # create model
     print("=> creating model unetplus")
-    model = NestedUNet(1, 1, False)
+    deep_supervision = True
+    model = NestedUNet(1, 1, deep_supervision)
     model = model.cuda()
     model.load_state_dict(torch.load('./saved_models/unetplus/model.pth'))
     model.eval()
@@ -167,7 +191,10 @@ def test_UNetplus():
             # Forward Propagation
             input = data['img'].to(device)
             label = data['label'].to(device)
-            output = model(input)
+            if deep_supervision:
+                output = model(input)[-1]
+            else:
+                output = model(input)
 
             # Calc Loss Function
             loss = loss_fn(output, label)

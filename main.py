@@ -2,7 +2,7 @@ import argparse
 from Unet_run import train_UNet, test_UNet
 from Unetplus_run import train_UNetplus, test_UNetplus
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')

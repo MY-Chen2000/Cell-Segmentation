@@ -12,6 +12,8 @@ from models.unet import UNet
 from utils.UNet_utils import *
 from config import *
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def train_UNet():
     cfg = UnetConfig()
@@ -39,7 +41,7 @@ def train_UNet():
 
     # Network
     net = UNet().to(device)
-
+    print(count_parameters(net))
     # Loss Function
     loss_fn = nn.BCEWithLogitsLoss().to(device)
 
