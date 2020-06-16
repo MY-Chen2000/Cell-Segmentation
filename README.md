@@ -18,10 +18,10 @@ Unet train
     python main.py
 Unet test
 
-        python main.py --test
+    python main.py --test
 UNet++ train
         
-        python main.py --model_name UNetplus
+    python main.py --model_name UNetplus
 UNet++ test
 
-        python main.py --model_name UNetplus --test
+    python main.py --model_name UNetplus --test
