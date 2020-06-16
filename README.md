@@ -7,11 +7,12 @@ Results
 
 Requirements
 -------------
-*python3.7
-*pytorch>1.3
+* python3.7
+* pytorch>1.3
 
 
 Usage
 -------------
 Unet train
+
     python main.py
