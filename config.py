@@ -38,3 +38,11 @@ class UnetConfig:
     LEARNING_RATE = 1e-3
     BATCH_SIZE = 2
     NUM_EPOCHS = 100
+
+class UnetplusConfig:
+    LEARNING_RATE = 1e-3
+    BATCH_SIZE = 2
+    NUM_EPOCHS = 100
+    momentum=0.9
+    nesterov=False
+    weight_decay=1e-4
