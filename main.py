@@ -1,6 +1,7 @@
 import argparse
 from Unet_run import train_UNet, test_UNet
 from Unetplus_run import train_UNetplus, test_UNetplus
+from general_run import train_general,valid_general
 import os
 #os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
@@ -24,3 +25,9 @@ if __name__ == '__main__':
             train_UNetplus()
         else:
             test_UNetplus()
+
+    else:
+        if args.test==False:
+            train_general(args)
+        else:
+            valid_general(args)
