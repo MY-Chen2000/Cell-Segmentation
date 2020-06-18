@@ -26,3 +26,11 @@ UNet++ train and test
         
     python main.py --model_name UNetplus
     python main.py --model_name UNetplus --test
+FCN train and test
+        
+    python main.py --model_name FCNet
+    python main.py --model_name FCNet --test
+CENet train and test
+        
+    python main.py --model_name CENet
+    python main.py --model_name CENet --test
