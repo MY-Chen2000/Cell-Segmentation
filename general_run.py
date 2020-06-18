@@ -5,7 +5,7 @@ import torch
 import time
 from torch.optim import SGD, Adam, ASGD, Adamax, Adadelta, Adagrad, RMSprop
 from torch.optim.lr_scheduler import MultiStepLR, ExponentialLR, CosineAnnealingLR
-from utils.loss import cross_entropy2d
+from utils.loss import cross_entropy2d,DiceLoss
 from load_data import get_loaders
 from utils.metrics import runningScore,averageMeter
 from tqdm import tqdm
@@ -36,7 +36,8 @@ def train_general(args):
             optimizer = SGD(model.parameters(), .1, weight_decay=5e-4, momentum=.99)
         elif args.optimizer == 'Adam':
             optimizer = Adam(model.parameters(), .1, weight_decay=5e-4)
-        criterion = cross_entropy2d
+        # criterion = cross_entropy2d
+        criterion = DiceLoss()
         scheduler = MultiStepLR(optimizer, [100, 200, 400, 800, 3200], .1)
     start_iter = 0
     if args.model_path is not None:

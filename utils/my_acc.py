@@ -33,9 +33,14 @@ class Acc_Meter:
             self.FP+=FP
             self.FN+=FN
     def get_acc(self):
-        prec=self.TP/(self.TP+self.FP)
-        recall=self.TP/(self.TP+self.FN)
-        acc=2*prec*recall/(prec+recall)
+        try:prec=self.TP/(self.TP+self.FP)
+        except:prec=0
+        try:recall=self.TP/(self.TP+self.FN)
+        except:recall=0
+        try:
+            acc=2*prec*recall/(prec+recall)
+        except:
+            acc=0
         cls_acc=(self.TP+self.TN)/self.N
 
         return {'prec':prec,

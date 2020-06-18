@@ -1,5 +1,6 @@
 import torch.nn.functional as F
-
+import torch.nn as nn
+import torch
 def cross_entropy2d(input, target, weight=None, size_average=True):
     n, c, h, w = input.size()
     # print(target)
@@ -20,3 +21,19 @@ def cross_entropy2d(input, target, weight=None, size_average=True):
         input, target, weight=weight, size_average=size_average, ignore_index=250
     )
     return loss
+
+class DiceLoss(nn.Module):
+    def __init__(self):
+        super(DiceLoss,self).__init__()
+        self.num_class=2
+        self.w=1/self.num_class
+    def forward(self, input, target):
+        tgt=torch.stack([target==c for c in range(self.num_class)],1).float()
+        l=1
+        for c in range(self.num_class):
+            sp=(input[:,c,:,:]**2).sum()
+            sg=(tgt[:,c,:,:]**2).sum()
+            s=sp+sg
+            co=2*self.w*((input[:,c,:,:]*tgt[:,c,:,:]).sum())
+            l-=co/s
+        return l
