@@ -7,7 +7,7 @@ http://brainiac2.mit.edu/isbi_challenge/
 
 Results
 -------------------
-* Unet 92.02
+* Unet 92.20
 * UNet++ 92.17
 * FCNet++ 88.66
 * CENet++ 91.51
