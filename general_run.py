@@ -34,11 +34,13 @@ def train_general(args):
         model = torch.nn.DataParallel(model)
         if args.optimizer == 'SGD':
             optimizer = SGD(model.parameters(), .1, weight_decay=5e-4, momentum=.99)
+            scheduler = MultiStepLR(optimizer, [100, 200, 400, 800, 3200], .1)
         elif args.optimizer == 'Adam':
-            optimizer = Adam(model.parameters(), .1, weight_decay=5e-4)
+            optimizer = Adam(model.parameters(), .001, weight_decay=5e-4)
+            scheduler = MultiStepLR(optimizer, [400, 3200], .1)
         # criterion = cross_entropy2d
         criterion = DiceLoss()
-        scheduler = MultiStepLR(optimizer, [100, 200, 400, 800, 3200], .1)
+        # scheduler = MultiStepLR(optimizer, [100, 200, 400, 800, 3200], .1)
     start_iter = 0
     if args.model_path is not None:
         if os.path.isfile(args.model_path):
