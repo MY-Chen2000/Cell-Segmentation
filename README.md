@@ -9,8 +9,8 @@ Results
 -------------------
 * Unet 92.20
 * UNet++ 92.17
-* FCNet++ 88.66
-* CENet++ 92.26
+* FCN 88.66
+* CENet 92.26
 
 Requirements
 -------------
