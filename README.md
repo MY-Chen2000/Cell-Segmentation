@@ -10,7 +10,7 @@ Results
 * Unet 92.20
 * UNet++ 92.17
 * FCNet++ 88.66
-* CENet++ 91.51
+* CENet++ 92.26
 
 Requirements
 -------------
