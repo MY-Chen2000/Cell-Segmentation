@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import torch
 
-__all__ = ['Dataset', 'ToTensor', 'GrayscaleNormalization', 'RandomFlip']
+__all__ = ['Dataset', 'ToTensor', 'GrayscaleNormalization', 'RandomFlip', 'RandomRotation']
 
 
 class Dataset(torch.utils.data.Dataset):
@@ -78,3 +78,24 @@ class RandomFlip:
             'label': label,
         }
         return ret
+
+
+class RandomRotation:
+    def __init__(self, angle=90):
+        self.angle = angle
+
+    def __call__(self, data):
+        img, label = data['img'], data['label']
+
+        angle = np.random.rand() * self.angle - self.angle/2.0
+        rows, cols = img.shape
+        M = cv2.getRotationMatrix2D(((cols - 1) / 2.0, (rows - 1) / 2.0), angle, 1, intborderMode=cv2.BORDER_REFLECT)
+        img = cv2.warpAffine(img, M, (cols, rows))
+        label = cv2.warpAffine(label, M, (cols, rows))
+
+        ret = {
+            'img': img,
+            'label': label,
+        }
+        return ret
+

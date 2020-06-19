@@ -19,6 +19,7 @@ def train_UNet():
     cfg = UnetConfig()
     train_transform = transforms.Compose([
         GrayscaleNormalization(mean=0.5, std=0.5),
+        RandomRotation(),
         RandomFlip(),
         ToTensor(),
     ])
@@ -62,7 +63,7 @@ def train_UNet():
 
     num_epochs = cfg.NUM_EPOCHS
     for epoch in range(start_epoch + 1, num_epochs + 1):
-        net.train()  # Train Mode
+        net.train()
         train_loss_arr = list()
 
         for batch_idx, data in enumerate(train_loader, 1):
@@ -85,15 +86,6 @@ def train_UNet():
             print_form = '[Train] | Epoch: {:0>4d} / {:0>4d} | Batch: {:0>4d} / {:0>4d} | Loss: {:.4f}'
             print(print_form.format(epoch, num_epochs, batch_idx, train_batch_num, train_loss_arr[-1]))
 
-            # Tensorboard
-            img = to_numpy(denormalization(img, mean=0.5, std=0.5))
-            label = to_numpy(label)
-            output = to_numpy(classify_class(output))
-
-            global_step = train_batch_num * (epoch - 1) + batch_idx
-            # train_writer.add_image(tag='img', img_tensor=img, global_step=global_step, dataformats='NHWC')
-            # train_writer.add_image(tag='label', img_tensor=label, global_step=global_step, dataformats='NHWC')
-            # train_writer.add_image(tag='output', img_tensor=output, global_step=global_step, dataformats='NHWC')
 
         train_loss_avg = np.mean(train_loss_arr)
         # train_writer.add_scalar(tag='loss', scalar_value=train_loss_avg, global_step=epoch)
@@ -117,15 +109,6 @@ def train_UNet():
                 print_form = '[Validation] | Epoch: {:0>4d} / {:0>4d} | Batch: {:0>4d} / {:0>4d} | Loss: {:.4f}'
                 print(print_form.format(epoch, num_epochs, batch_idx, val_batch_num, val_loss_arr[-1]))
 
-                # Tensorboard
-                img = to_numpy(denormalization(img, mean=0.5, std=0.5))
-                label = to_numpy(label)
-                output = to_numpy(classify_class(output))
-
-                global_step = val_batch_num * (epoch - 1) + batch_idx
-                # val_writer.add_image(tag='img', img_tensor=img, global_step=global_step, dataformats='NHWC')
-                # val_writer.add_image(tag='label', img_tensor=label, global_step=global_step, dataformats='NHWC')
-                # val_writer.add_image(tag='output', img_tensor=output, global_step=global_step, dataformats='NHWC')
 
         val_loss_avg = np.mean(val_loss_arr)
         # val_writer.add_scalar(tag='loss', scalar_value=val_loss_avg, global_step=epoch)
@@ -179,7 +162,7 @@ def test_UNet():
 
     # Evaluation
     with torch.no_grad():
-        net.eval()  # Evaluation Mode
+        net.eval()
         loss_arr = list()
 
         for batch_idx, data in enumerate(test_loader, 1):
@@ -196,18 +179,14 @@ def test_UNet():
             print_form = '[Test] | Batch: {:0>4d} / {:0>4d} | Loss: {:.4f}'
             print(print_form.format(batch_idx, test_batch_num, loss_arr[-1]))
 
-            # img = to_numpy(denormalization(img, mean=0.5, std=0.5))
             label = to_numpy(label)
             output = to_numpy(classify_class(output))
 
             for j in range(label.shape[0]):
                 crt_id = int(test_batch_num * (batch_idx - 1) + j)
-                # plt.imsave(os.path.join(RESULTS_DIR, f'img/{crt_id:04}.png'), img[j].squeeze(), cmap='gray')
                 plt.imsave(os.path.join(label_save_path, f'{crt_id:04}.png'), label[j].squeeze(), cmap='gray')
                 plt.imsave(os.path.join(output_save_path, f'{crt_id:04}.png'), output[j].squeeze(), cmap='gray')
 
-    # print_form = '[Result] | Avg Loss: {:0.4f}'
-    # print(print_form.format(np.mean(loss_arr)))
     unet_acc(output_save_path, label_save_path)
 
 
